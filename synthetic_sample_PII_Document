@@ -1,0 +1,49 @@
+# Create the synthetic text file directly inside the Colab environment
+sample_text = """================================================================================
+                    DEPARTMENT OF MOTOR VEHICLES & CITIZEN SERVICES
+                             OFFICIAL IDENTIFICATION RECORD
+================================================================================
+
+RECORD NUMBER: DL-99203418-A                               DATE ISSUED: 04/12/2021
+DOCUMENT STATUS: VERIFIED                                  EXPIRATION:  04/12/2031
+
+--------------------------------------------------------------------------------
+SECTION 1: PERSONAL IDENTIFICATION DATA
+--------------------------------------------------------------------------------
+
+Full Name:              [PII: FULL NAME]        -> JANE MARY DOE
+Social Security No.:    [PII: HIGHLY SENSITIVE] -> XXX-XX-4819
+Date of Birth:          [PII: DOB]              -> 08/14/1988
+Gender / Sex:           [PII: DEMOGRAPHIC]      -> FEMALE
+
+Primary Address:        [PII: PHYSICAL ADDRESS] -> 742 EVERGREEN TERRACE
+                                                 SPRINGFIELD, OR 97477
+Phone Number:           [PII: PHONE NUMBER]     -> (555) 019-2834
+Email Address:          [PII: EMAIL ADDRESS]    -> JANE.DOE88@EXAMPLE.COM
+
+--------------------------------------------------------------------------------
+SECTION 2: BIOMETRIC & DOCUMENT DETAILS
+--------------------------------------------------------------------------------
+
+Driver's License No.:   [PII: GOVT ID]          -> D-8392019-OR
+Passport Number:        [PII: GOVT ID]          -> A-49102938
+Height / Weight:        [PII: BIOMETRIC]        -> 5' 7" / 135 LBS
+Eye / Hair Color:       [PII: BIOMETRIC]        -> HAZEL / BROWN
+
+--------------------------------------------------------------------------------
+SECTION 3: FINANCIAL & VERIFICATION METRICS
+--------------------------------------------------------------------------------
+
+Direct Deposit Account: [PII: FINANCIAL]        -> ROUTING: 121000358
+                                                   ACCOUNT: *******4920
+Tax Identification:     [PII: HIGHLY SENSITIVE] -> 98-7654321
+
+================================================================================
+                      INTERNAL USE ONLY - PII DETECTOR AUDIT
+================================================================================
+"""
+
+with open("synthetic_pii_document_mock.txt", "w") as f:
+    f.write(sample_text)
+
+print("Created 'synthetic_pii_document_mock.txt' successfully.")
