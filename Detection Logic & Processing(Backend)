@@ -1,0 +1,54 @@
+import re
+import spacy
+
+# Load spaCy NLP engine
+nlp = spacy.load("en_core_web_sm")
+
+# Define PII Regex rules (General & US formats)
+PII_PATTERNS = {
+    "SSN": r"\b\d{3}-\d{2}-\d{4}\b",
+    "PHONE": r"\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}",
+    "EMAIL": r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b",
+    "ZIP_CODE": r"\b\d{5}(?:-\d{4})?\b",
+    "ROUTING_NO": r"\b\d{9}\b",
+    "TAX_ID": r"\b\d{2}-\d{7}\b"
+}
+
+def analyze_document(file_path):
+    with open(file_path, "r") as f:
+        text = f.read()
+
+    detections = []
+
+    # 1. Regex Extraction
+    for pii_type, pattern in PII_PATTERNS.items():
+        for match in re.finditer(pattern, text):
+            detections.append({
+                "type": pii_type,
+                "text": match.group(),
+                "source": "regex"
+            })
+
+    # 2. Named Entity Recognition (NER)
+    doc = nlp(text)
+    for ent in doc.ents:
+        if ent.label_ in ["PERSON", "GPE", "ORG", "DATE"]:
+            # Filter out non-PII headers
+            if ent.text not in ["DEPARTMENT OF MOTOR VEHICLES & CITIZEN SERVICES", "SECTION", "INTERNAL USE ONLY"]:
+                detections.append({
+                    "type": ent.label_,
+                    "text": ent.text,
+                    "source": "ner"
+                })
+
+    # Display formatted output
+    print(f"\n=== PII DETECTION REPORT ({file_path}) ===")
+    print(f"Total Matches Identified: {len(detections)}\n")
+    print(f"{'INDEX':<6} | {'TYPE':<12} | {'DETECTED TEXT':<30} | {'ENGINE'}")
+    print("-" * 65)
+
+    for idx, item in enumerate(detections, 1):
+        print(f"{idx:<6} | {item['type']:<12} | {item['text']:<30} | {item['source']}")
+
+# Run analysis on the created file
+analyze_document("synthetic_pii_document_mock.txt")
